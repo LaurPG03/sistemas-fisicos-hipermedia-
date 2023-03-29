@@ -1,0 +1,102 @@
+/* Program sensor warna
+   Oleh   : Aan Darmawan
+   web    : valfa.blogspot.com
+   update : 25 Mei 2012
+*/
+   
+#include <Servo.h> 
+Servo myservo; 
+int sensorPin = A0;
+int LedBiru =3; // Led warna biru digital pin 3
+int LedHijau=4; // Led warna hijau digital pin 4
+int LedMerah=5; // Led warna merah digital pin 5
+int hasil,hasilb,hasilm,hasilh;
+int k=8;  // toleransi warna
+
+void setup() {
+// declare the ledPin as an OUTPUT:
+  pinMode(LedBiru,OUTPUT);
+  pinMode(LedMerah,OUTPUT);
+  pinMode(LedHijau,OUTPUT);  
+  digitalWrite(LedBiru,LOW);
+  digitalWrite(LedMerah,LOW);
+  digitalWrite(LedHijau,LOW);
+  myservo.attach(9);  // motor servo pin digital 9
+  myservo.write(90);      
+  delay(100);       
+  Serial.begin(9600);
+  delay(1000);
+}
+
+void loop() {
+  // nyalakan LedMerah
+  digitalWrite(LedMerah,HIGH);
+  //delay 150 ms agar LDR baca stabil
+  delay(150);
+  // baca data sensor
+  hasil= analogRead(sensorPin);
+  hasilm=map(hasil,0,1023,0,255);
+  Serial.print("R,G,B = ");
+  Serial.print(hasilm); 
+  digitalWrite(LedMerah,LOW);    
+  delay(150);
+
+  // nyalakan LedHijau
+  digitalWrite(LedHijau,HIGH);
+  //delay 150 ms agar LDR baca stabil
+  delay(150);
+  // baca data sensor
+  hasil= analogRead(sensorPin);
+  hasilh=map(hasil,0,1023,0,255);  
+  Serial.print(",");
+  Serial.print(hasilh); 
+  digitalWrite(LedHijau,LOW);    
+  delay(150);
+  
+  // nyalakan LedBiru
+  digitalWrite(LedBiru,HIGH);
+  //delay 150 ms agar LDR baca stabil
+  delay(150);
+  // baca data sensor
+  hasil= analogRead(sensorPin);
+  hasilb=map(hasil,0,1023,0,255);  
+  Serial.print(",");
+  Serial.println(hasilb); 
+  digitalWrite(LedBiru,LOW);  
+  delay(150);
+
+  // cek warna dibandingkan dengan nilai hasil kalibrasi
+  if(abs(hasilm-208)<k && abs(hasilh-203)<k && abs(hasilb-177)<k){
+    Serial.println(" -> WARNA PUTIH!\n");
+    myservo.write(10);    } else
+  if(abs(hasilm-209)<k && abs(hasilh-165)<k && abs(hasilb-139)<k){
+    Serial.println(" -> WARNA MERAH !\n");
+    myservo.write(30);   } else
+  if(abs(hasilm-135)<k && abs(hasilh-182)<k && abs(hasilb-147)<k){
+    Serial.println(" -> WARNA HIJAU !\n");
+     myservo.write(50); }  else  
+  if(abs(hasilm-138)<k && abs(hasilh-163)<k && abs(hasilb-166)<k){
+    Serial.println(" -> WARNA BIRU !\n");
+    myservo.write(70);   } else
+  if(abs(hasilm-156)<k && abs(hasilh-184)<k && abs(hasilb-172)<k){
+    Serial.println(" -> WARNA CYAN !\n");
+    myservo.write(90);   } else
+  if(abs(hasilm-199)<k && abs(hasilh-159)<k && abs(hasilb-170)<k){
+    Serial.println(" -> WARNA UNGU !\n");
+     myservo.write(110); }  else  
+  if(abs(hasilm-209)<k && abs(hasilh-214)<k && abs(hasilb-223)<k){
+    Serial.println(" -> WARNA KUNING !\n");
+    myservo.write(130);   }  else  
+  if(abs(hasilm-210)<k && abs(hasilh-206)<k && abs(hasilb-211)<k){
+    Serial.println(" -> WARNA PINK !\n");
+    myservo.write(150);   } else
+  if(abs(hasilm-165)<k && abs(hasilh-197)<k && abs(hasilb-205)<k){
+    Serial.println(" -> WARNA HIJAU MUDA !\n");
+    myservo.write(170);   } else
+//  if(abs(hasilm-209)<k && abs(hasilh-204)<k && abs(hasilb-210)<k){
+//    Serial.println(" -> WARNA KUNING MUDA!\n");
+//     myservo.write(180); } else
+    Serial.println(" -> ???\n");     
+    
+  delay (2000);
+}
